@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.20)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+
+project(05_animated_triangle)
+
+include_directories(../shared/include)
+
+link_directories(C:/msys64/ucrt64/lib)
+
+add_executable(05_animated_triangle
+    src/main.cpp
+    ../shared/src/glad.c
+)
+
+target_link_libraries(05_animated_triangle
+    glfw3
+    opengl32
+)
