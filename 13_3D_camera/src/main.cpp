@@ -106,6 +106,9 @@ public:
         {
             moveLeft();
         }
+        // this makes the camera fps like (binded to the ground)
+        // change it later to match the terrain height
+        m_cameraPos.y = 0;
     }
 
     void processMouse(float xoffset, float yoffset, GLboolean pitchLock = true)
@@ -286,7 +289,7 @@ public:
         model = glm::rotate(model , glm::radians(rotation) , glm::vec3(0.0f , 0.0f , 1.0f));
         model = glm::scale(model , size);
         
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f) , (float)(800.0/600.0) , 1.0f , 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f) , (float)(800.0/600.0) , 0.1f , 100.0f);
 
         glm::mat4 view = camera.getViewMatrix();
 
