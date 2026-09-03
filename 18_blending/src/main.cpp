@@ -328,18 +328,27 @@ public:
         }
         glViewport(0 , 0 , 800 , 600);
 
+        glEnable(GL_STENCIL_TEST);
+
         Cube cube("../assets/container.png" , "../shader/cube_shader.vs" , "../shader/cube_shader.fs");
+        Cube stencil_cube("../assets/container.png" , "../shader/stencil_cube_shader.vs" , "../shader/stencil_cube_shader.fs");
 
         SpriteRenderer spriteRenderer("../assets/redWindow.png" , "../shader/sprite_shader.vs" , "../shader/sprite_shader.fs");
 
 
         while(!glfwWindowShouldClose(window))
         {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-            cube.draw(glm::vec3(1.0f) , { 0.0f , 0.0f , -10.0f});
+            glStencilFunc(GL_ALWAYS , 1 , 0xFF);
+            glStencilOp(GL_KEEP , GL_KEEP , GL_REPLACE);
 
-            spriteRenderer.draw( glm::vec2(1.0f) , {0.0f , 0.0f , 0.0f});
+            cube.draw(glm::vec3(1.0f) , { 0.0f , 0.0f , 0.0f});
+
+            glStencilFunc(GL_NOTEQUAL , 1 , 0xFF);
+            glStencilOp(GL_KEEP , GL_KEEP , GL_KEEP);
+
+            stencil_cube.draw(glm::vec3(1.001f) , { 0.0f , 0.0f , 0.0f});
 
             glfwSwapBuffers(window);
             glfwPollEvents();
