@@ -305,7 +305,7 @@ public:
         }
     };
 
-    int main()
+int main()
     {
         glfwInit();
 
