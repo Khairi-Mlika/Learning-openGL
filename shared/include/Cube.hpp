@@ -1,3 +1,15 @@
+#include <iostream>
+
+#include <GLAD/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <stb_image.h>
+#include <shader.h>
+
 class Cube
 {
 public:
@@ -16,51 +28,51 @@ public:
             // ============================================================
             // FRONT (+Z)
             // ============================================================
-            // position              // UV
-            -0.5f,  0.5f,  0.5f,     0.0f, 1.0f, // top-left
-            0.5f,  0.5f,  0.5f,     1.0f, 1.0f, // top-right
-            -0.5f, -0.5f,  0.5f,     0.0f, 0.0f, // bottom-left
-            0.5f, -0.5f,  0.5f,     1.0f, 0.0f, // bottom-right
+            // position             //normal              // UV
+            -0.5f,  0.5f,  0.5f,    0.0f, 0.0f, 1.0f,     0.0f, 1.0f, // top-left
+             0.5f,  0.5f,  0.5f,    0.0f, 0.0f, 1.0f,     1.0f, 1.0f, // top-right
+            -0.5f, -0.5f,  0.5f,    0.0f, 0.0f, 1.0f,     0.0f, 0.0f, // bottom-left
+             0.5f, -0.5f,  0.5f,    0.0f, 0.0f, 1.0f,     1.0f, 0.0f, // bottom-right
 
             // ============================================================
             // BACK (-Z)
             // ============================================================
-            -0.5f,  0.5f, -0.5f,     1.0f, 1.0f, // top-left
-            0.5f,  0.5f, -0.5f,     0.0f, 1.0f, // top-right
-            -0.5f, -0.5f, -0.5f,     1.0f, 0.0f, // bottom-left
-            0.5f, -0.5f, -0.5f,     0.0f, 0.0f, // bottom-right
+            -0.5f,  0.5f, -0.5f,    0.0f, 0.0f, -1.0f,    1.0f, 1.0f, // top-left
+             0.5f,  0.5f, -0.5f,    0.0f, 0.0f, -1.0f,    0.0f, 1.0f, // top-right
+            -0.5f, -0.5f, -0.5f,    0.0f, 0.0f, -1.0f,    1.0f, 0.0f, // bottom-left
+             0.5f, -0.5f, -0.5f,    0.0f, 0.0f, -1.0f,    0.0f, 0.0f, // bottom-right
 
             // ============================================================
             // TOP (+Y)
             // ============================================================
-            -0.5f,  0.5f,  0.5f,     0.0f, 0.0f, // front-left
-            0.5f,  0.5f,  0.5f,     1.0f, 0.0f, // front-right
-            -0.5f,  0.5f, -0.5f,     0.0f, 1.0f, // back-left
-            0.5f,  0.5f, -0.5f,     1.0f, 1.0f, // back-right
+            -0.5f,  0.5f,  0.5f,    0.0f, 1.0f, 0.0f,     0.0f, 0.0f, // front-left
+             0.5f,  0.5f,  0.5f,    0.0f, 1.0f, 0.0f,     1.0f, 0.0f, // front-right
+            -0.5f,  0.5f, -0.5f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, // back-left
+             0.5f,  0.5f, -0.5f,    0.0f, 1.0f, 0.0f,     1.0f, 1.0f, // back-right
 
             // ============================================================
             // BOTTOM (-Y)
             // ============================================================
-            -0.5f, -0.5f,  0.5f,     0.0f, 1.0f, // front-left
-            0.5f, -0.5f,  0.5f,     1.0f, 1.0f, // front-right
-            -0.5f, -0.5f, -0.5f,     0.0f, 0.0f, // back-left
-            0.5f, -0.5f, -0.5f,     1.0f, 0.0f, // back-right
+            -0.5f, -0.5f,  0.5f,    0.0f, -1.0f, 0.0f,    0.0f, 1.0f, // front-left
+             0.5f, -0.5f,  0.5f,    0.0f, -1.0f, 0.0f,    1.0f, 1.0f, // front-right
+            -0.5f, -0.5f, -0.5f,    0.0f, -1.0f, 0.0f,    0.0f, 0.0f, // back-left
+             0.5f, -0.5f, -0.5f,    0.0f, -1.0f, 0.0f,    1.0f, 0.0f, // back-right
 
             // ============================================================
             // RIGHT (+X)
             // ============================================================
-            0.5f,  0.5f,  0.5f,     0.0f, 1.0f, // top-front
-            0.5f, -0.5f,  0.5f,     0.0f, 0.0f, // bottom-front
-            0.5f,  0.5f, -0.5f,     1.0f, 1.0f, // top-back
-            0.5f, -0.5f, -0.5f,     1.0f, 0.0f, // bottom-back
+            0.5f,  0.5f,  0.5f,     1.0f, 0.0f, 0.0f,    0.0f, 1.0f, // top-front
+            0.5f, -0.5f,  0.5f,     1.0f, 0.0f, 0.0f,    0.0f, 0.0f, // bottom-front
+            0.5f,  0.5f, -0.5f,     1.0f, 0.0f, 0.0f,    1.0f, 1.0f, // top-back
+            0.5f, -0.5f, -0.5f,     1.0f, 0.0f, 0.0f,    1.0f, 0.0f, // bottom-back
 
             // ============================================================
             // LEFT (-X)
             // ============================================================
-            -0.5f,  0.5f, -0.5f,     0.0f, 1.0f, // top-back
-            -0.5f, -0.5f, -0.5f,     0.0f, 0.0f, // bottom-back
-            -0.5f,  0.5f,  0.5f,     1.0f, 1.0f, // top-front
-            -0.5f, -0.5f,  0.5f,     1.0f, 0.0f  // bottom-front
+            -0.5f,  0.5f, -0.5f,    -1.0f, 0.0f, 0.0f,   0.0f, 1.0f, // top-back
+            -0.5f, -0.5f, -0.5f,    -1.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom-back
+            -0.5f,  0.5f,  0.5f,    -1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top-front
+            -0.5f, -0.5f,  0.5f,    -1.0f, 0.0f, 0.0f,   1.0f, 0.0f  // bottom-front
         };
 
         unsigned int indices[] = {
@@ -104,11 +116,13 @@ public:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER , sizeof(indices) , indices , GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 5 * sizeof(float) , (void*)0);
-        glVertexAttribPointer(1 , 2 , GL_FLOAT , GL_FALSE , 5 * sizeof(float) , (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 8 * sizeof(float) , (void*)0);
+        glVertexAttribPointer(1 , 3 , GL_FLOAT , GL_FALSE , 8 * sizeof(float) , (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(2 , 2 , GL_FLOAT , GL_FALSE , 8 * sizeof(float) , (void*)(6 * sizeof(float)));
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
             
         glGenTextures(1 , &m_texture);
         glActiveTexture(GL_TEXTURE0);
@@ -173,10 +187,6 @@ public:
         m_shaderProgram.setMat4("projection" , projection);
         m_shaderProgram.setMat4("view" , view);
 
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
         glBindVertexArray(m_VAO);
         glDrawElements(GL_TRIANGLES , 36 , GL_UNSIGNED_INT , 0);
     }
@@ -198,8 +208,6 @@ public:
         m_shaderProgram.setMat4("model" , model);
         m_shaderProgram.setMat4("projection" , projection);
         m_shaderProgram.setMat4("view" , view);
-
-        glEnable(GL_DEPTH_TEST);
 
         glBindVertexArray(m_VAO);
         glDrawElements(GL_TRIANGLES , 36 , GL_UNSIGNED_INT , 0);
