@@ -106,7 +106,7 @@ public:
         }
         // this makes the camera fps like (binded to the ground)
         // change it later to match the terrain height
-        m_cameraPos.y = 0;
+        //m_cameraPos.y = 0;
     }
 
     void processMouse(float xoffset, float yoffset, GLboolean pitchLock = true)
