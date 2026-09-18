@@ -14,7 +14,8 @@ using namespace std;
 
 #define MAX_BONE_INFLUENCE 4
 
-struct Vertex {
+struct Vertex
+{
     // position
     glm::vec3 Position;
     // normal
@@ -25,24 +26,26 @@ struct Vertex {
     glm::vec3 Tangent;
     // bitangent
     glm::vec3 Bitangent;
-    //bone indexes which will influence this vertex
+    // bone indexes which will influence this vertex
     int m_BoneIDs[MAX_BONE_INFLUENCE];
-    //weights from each bone
+    // weights from each bone
     float m_Weights[MAX_BONE_INFLUENCE];
 };
 
-struct Texture {
+struct Texture
+{
     unsigned int id;
     string type;
     string path;
 };
 
-class Mesh {
+class Mesh
+{
 public:
     // mesh Data
-    vector<Vertex>       vertices;
+    vector<Vertex> vertices;
     vector<unsigned int> indices;
-    vector<Texture>      textures;
+    vector<Texture> textures;
     unsigned int VAO;
 
     // constructor
@@ -53,12 +56,11 @@ public:
         this->textures = textures;
 
         // now that we have all the required data, set the vertex buffers and its attribute pointers.
-        setupTextures();
         setupMesh();
     }
 
     // render the mesh
-    void Draw(Shader& shader)
+    void Draw(Shader &shader)
     {
         // bind appropriate textures
         unsigned int diffuseNr = 1;
@@ -96,39 +98,8 @@ public:
     }
 
 private:
-    // render data 
+    // render data
     unsigned int VBO, EBO;
-
-    // setup textures
-    void setupTextures()
-    {
-        for (auto& tex : textures)
-        {
-            glBindTexture(GL_TEXTURE_2D, tex.id);
-
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-            // wrapping & filtering
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-            int width, height, nrChannels;
-            unsigned char* data = stbi_load(tex.path.c_str(), &width, &height, &nrChannels, 0);
-            if (data)
-            {
-                GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
-                glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-                glGenerateMipmap(GL_TEXTURE_2D);
-            }
-            else
-            {
-                std::cout << "TEXTURE:FAILED:" << tex.path << std::endl;
-            }
-            stbi_image_free(data);
-        }
-    }
 
     // initializes all the buffer objects/arrays
     void setupMesh()
@@ -152,26 +123,26 @@ private:
         // set the vertex attribute pointers
         // vertex Positions
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
         // vertex normals
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, Normal));
         // vertex texture coords
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, TexCoords));
         // vertex tangent
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, Tangent));
         // vertex bitangent
         glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, Bitangent));
         // ids
         glEnableVertexAttribArray(5);
-        glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, m_BoneIDs));
+        glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void *)offsetof(Vertex, m_BoneIDs));
 
         // weights
         glEnableVertexAttribArray(6);
-        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, m_Weights));
         glBindVertexArray(0);
     }
 };
