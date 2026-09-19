@@ -6,10 +6,13 @@ struct LightPoint{
 };
 
 in vec3 FragPos;
-in vec3 normal;
+in vec3 N;
+in vec3 B;
+in vec3 T;
 in vec2 TextCoord;
 
 uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_normal1;
 
 uniform LightPoint light;
 uniform vec3 viewPos;
@@ -43,6 +46,12 @@ vec3 calcSpecular(vec3 norm , vec3 lightDir , vec3 viewDir , vec3 color)
 void main()
 {
     vec3 tex = texture(texture_diffuse1 , TextCoord).xyz;
+    vec3 normal = texture(texture_normal1 , TextCoord).rgb;
+
+    mat3 TBN = mat3(T , B , N);
+
+    normal = normal * 0.2 - 1.0;
+    normal = TBN * normal;
 
     vec3 norm = normalize(normal);
     vec3 lightDir = normalize(light.position - FragPos);
