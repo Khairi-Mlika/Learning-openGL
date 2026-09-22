@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.20) 
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+
+project(main)
+
+include_directories(../shared/include)
+link_directories(C:/msys64/ucrt64/lib)
+
+add_executable(main
+    src/main.cpp
+    ../shared/src/stb_image.cpp
+    ../shared/src/glad.c
+)
+
+target_link_libraries(main
+    glfw3
+    opengl32
+)
